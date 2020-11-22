@@ -1,0 +1,22 @@
+baseURL = "http://jlucasdba.github.io/"
+languageCode = "en-us"
+title = "Thoughts and Ramblings"
+theme = "purehugo"
+paginate = 10
+
+[params]
+  description = "Journal of a Database Admin"
+
+[privacy]
+  [privacy.disqus]
+    disable = true
+  [privacy.googleAnalytics]
+    disable = true
+  [privacy.instagram]
+    disable = true
+  [privacy.twitter]
+    disable = true
+  [privacy.vimeo]
+    disable = true
+  [privacy.youtube]
+    disable = true
