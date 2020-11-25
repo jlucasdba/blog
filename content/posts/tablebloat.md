@@ -1,7 +1,7 @@
 ---
 title: "Postgres Table Bloat"
 date: 2020-11-25T11:29:05-06:00
-draft: true
+draft: false
 ---
 
 One of the things DBAs coming from other database systems (like Oracle) need to be aware of when coming to Postgres is how Postgres manages changed data. This is covered in depth in a lot of other places, so I won't repeat in too much detail. The short version is that when a row is updated or deleted, Postgres maintains the old version of that row within the table data file. Visibility of the old version to concurrent transactions is controlled by transaction id. Eventually, when the old row versions are no longer needed, they are garbage collected by the table vacuum process.
