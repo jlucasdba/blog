@@ -1,6 +1,6 @@
 baseURL = "http://jlucasdba.github.io/"
 languageCode = "en-us"
-title = "Thoughts and Ramblings"
+title = "Rows and Columns"
 theme = "purehugo"
 paginate = 10
 
