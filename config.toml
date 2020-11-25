@@ -1,4 +1,4 @@
-baseURL = "http://jlucasdba.github.io/"
+baseURL = "https://jlucasdba.github.io/"
 languageCode = "en-us"
 title = "Rows and Columns"
 theme = "purehugo"
