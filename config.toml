@@ -6,6 +6,7 @@ paginate = 10
 
 [params]
   description = "Journal of a Database Admin"
+  hideShareOptions = true
 
 [privacy]
   [privacy.disqus]
