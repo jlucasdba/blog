@@ -23,7 +23,7 @@ Here's a really simple example.
       First commit.
 ```
 
-Oops. We used an email address we shouldn't have. Maybe a personal email instead of a work email. Filter-branch has a number of different filters. For rewriting metadata info like author email, the one you want is the **env-filter**. You provide a block to be executed for each processed commit (which might be a complex script in and of itself), and the environment variables set at the end are used to rewrite the commit metadata. (There's a list of available filters and how to use them in the [git-filter-branch man page](https://git-scm.com/docs/git-filter-branch)). So in our example, we want to set the GIT_AUTHOR_EMAIL variable, to change the author email to something else.  So our command looks like this:
+Oops. We used an email address we shouldn't have. Maybe a personal email instead of a work email. Filter-branch has a number of different filters. For rewriting metadata info like author email, the one you want is the `env-filter`. You provide a block to be executed for each processed commit (which might be a complex script in and of itself), and the environment variables set at the end are used to rewrite the commit metadata. (There's a list of available filters and how to use them in the [git-filter-branch man page](https://git-scm.com/docs/git-filter-branch)). So in our example, we want to set the GIT_AUTHOR_EMAIL variable, to change the author email to something else.  So our command looks like this:
 
 ```
 git filter-branch --env-filter 'export GIT_AUTHOR_EMAIL="public.email"' master
