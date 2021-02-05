@@ -1,0 +1,21 @@
+---
+title: "DIMM Ordering"
+date: 2021-02-04T18:39:33-06:00
+draft: false
+---
+
+I usually talk about software issues, but today an interesting story about hardware.  I was upgrading the RAM in my personal desktop a few weeks ago.  I bought a 2x16GB DIMM kit, rated for DDR-3200 XMP operation.  XMP is basically a factory-flagged overclock mode, where setting the motherboard to XMP mode *should* allow the system to clock the RAM at the rated speed on the package.  There's no absolute guarantee this will work with any given motherboard, but the DIMMs are checked at the factory and binned for it.
+
+So I bought a 2x16 Crucial DIMM kit and pulled the old RAM.  On my board, slots 1 and 2 are memory channel 1, and slots 3 and 4 are channel 2.  The manual recommends that with only two DIMMs, you install in slots 2 and 4 for dual channel operation, so that's what I did.  Set the RAM timings in BIOS to standard, booted up, no problem.  Went back and set to XMP, no problem.  Great.
+
+A couple weeks later I decided I really wanted 64GB instead of 32.  I went back to the same store, and bought another of the same kit.  I installed the new DIMMs in slots 1 and 3, alongside the existing DIMMs.  Tried to start the system, and it wouldn't boot.  I couldn't even get to the UEFI config screen.  After trying various combinations, and pulling DIMMs, I finally did get the system to boot again with all 4 DIMMs, but at DDR-2666.  Disappointing, but okay...
+
+However, after some further testing, I wasn't satisfied with the system stability.  It would sometimes boot, but other times it wouldn't come up reliably.  I was really scratching my head.
+
+I was looking at [cpu-z](https://www.cpuid.com/softwares/cpu-z.html) for any clues, when I noticed something.  Two of the DIMMs showed "Rank: Single", while the other two showed "Rank: Dual".  These kits were supposed to be identical.  It turns out, that even though the kits had the same model number on the package, they were manufactured a week apart, and were in fact subtly different.  One kit contained single-ranked DIMMs, while the other contained double-ranked (meaning one set had memory chips on only one side of the DIMM, while the other set had twice as many smaller chips on both sides of the DIMM).  You couldn't tell by looking at the packaging, nor could you tell by looking at the modules because the heat spreaders cover the memory chips.
+
+This got me thinking - the first two DIMMs (which were double-ranked) were in slots 2 and 4, and thus on different channels.  Now I'd added single-ranked DIMMs in slots 1 and 3, meaning that I had mixed single and double ranked modules on both channels.  I'm not a hardware engineer, but I recalled that mixing differently ranked DIMMs is not recommended.  So I swapped the DIMMs around so the dual-ranked modules were in slots 1 and 2, and the single-ranked ones were in slots 3 and 4.  Meaning that each memory channel now only contained one type of module.
+
+The stability problems immediately disappeared.  The system boots reliably, even at DDR-3200.  I like to use a tool called [Prime95](https://www.mersenne.org) for CPU/RAM stability testing.  This tool is part of a distributed computing effort to identify Mersenne prime numbers.  For stability testing purposes, it also has a "torture test" mode for stress testing CPU and memory.  This mode does heavy computations that tax the system components.  The results are already known, so you are looking for failed tests that would indicate abnormal operation.  A failed test means a wrong computation result, or some value in RAM that was stored/retrieved incorrectly.  In normal operation, that could lead to data corruption, application crashes, or system crashes.  I let the test run for 24 hours and didn't find any errors, which gives a pretty high degree of confidence that the system is stable.
+
+So the moral of the story is, when buying RAM your best bet is to buy a full kit at once to be sure the modules are all the same.  Failing that, check your modules *very* carefully for any differences, even if they're nominally the same model.  And if your DIMMs are somehow different, try to put the most alike ones together in the same channel.  You might save yourself a lot of headaches.
