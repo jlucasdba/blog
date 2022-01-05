@@ -1,7 +1,7 @@
 ---
 title: "pgstratify"
 date: 2022-01-04T23:14:00-06:00
-draft: true
+draft: false
 ---
 I wanted to share a project I've been working on the last few weeks, called pgstratify. This was written in equal parts to provide a tool I thought would be useful for postgres DBAs, and as an exercise to teach myself Go. I feel like it succeeded pretty well on both fronts.
 
