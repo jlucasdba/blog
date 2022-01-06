@@ -35,7 +35,7 @@ LOG:  automatic analyze of table "stratify.public.vactest" system usage: CPU: us
 ```
 
 And if we re-run our previous queries we see the statistics have been updated:
-```sql
+```postgres
 select relname, n_dead_tup, n_mod_since_analyze from pg_stat_all_tables where relname='vactest';
  relname | n_dead_tup | n_mod_since_analyze 
 ---------+------------+---------------------
@@ -61,7 +61,7 @@ INFO:  "vactest": found 0 removable, 56 nonremovable row versions in 1 out of 45
 The first vacuum run scans all 45 pages in the table because they are new and have never previously been vacuumed. The second vacuum run only has to examine 1 page, because the postgres visibility map tracks whether pages have been modified since they were last vacuumed. Postgres can skip known-clean pages for a speedup. For large tables, this optimization is an important factor in keeping your vacuum run times down.
 
 Now we'll create some dead tuples.
-```sql
+```postgres
 update vactest set t='bar' where id%3=0;
 UPDATE 3333
 
@@ -84,7 +84,7 @@ LOG:  automatic vacuum of table "stratify.public.vactest": index scans: 0
 So the autovacuum output doesn't actually reflect the speedup from skipping known-vacuumed pages, but it does take advantage of it. The other important factor in how long vacuum takes to run is the number of dead tuples that need to be removed. This is especially true when indexes are involved, because the dead tuples have to be stored in memory, and each index on the table has to be scanned to clean up the corresponding index entries.
 
 So now let's setup a more realistic example and try to demonstrate:
-```sql
+```postgres
 stratify=# create table vactest(id integer, t text);
 CREATE TABLE
 stratify=# insert into vactest (id, t) select generate_series(1,50000000),'foo';
@@ -96,13 +96,13 @@ CREATE INDEX
 ```
 
 So now we have a table with 50000000 rows, and a couple of indexes. I've analyzed and vacuumed the table. I'm going to update 20% of the table, which would be the threshold to trigger an autovacuum with scale factor .2:
-```sql
+```postgres
 update vactest set t='bar' where id%5=0;
 UPDATE 10000000
 ```
 
 I'm going to manually vacuum so we can get more detail about what is happening, but I'm going to set `vacuum_cost_delay=2` to throttle my manual vacuum the same way autovacuum is throttled by default. `vacuum_cost_limit` is still set to `200`, which is also the default.
-```sql
+```postgres
 vacuum verbose vactest;
 INFO:  vacuuming "public.vactest"
 INFO:  scanned index "pk_vactest" to remove 10000000 row versions
@@ -142,7 +142,7 @@ VACUUM
 This took around 5 minutes, but of course this is a dev system that is totally idle, the rows aren't very large, there's minimal TOAST involved, and there's not really that many indexes. Vacuum times can get really out of hand when there's more going on.
 
 Now we'll do the same thing, but with only 99 dead tuples:
-```sql
+```postgres
 update vactest set t='bar' where id<100;
 UPDATE 99
 stratify=# vacuum verbose vactest;
